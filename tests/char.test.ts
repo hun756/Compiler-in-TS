@@ -124,4 +124,29 @@ describe('Test For Char', () => {
         })
 
     });
+
+    interface ITestStructwParam {
+        ch: string;
+        param: string;
+        actual: boolean;
+    }
+
+    it('Check isEqual', () => {
+        let testVec: ITestStructwParam[] = [
+            { ch: "+", param:"+", actual: true },
+            { ch: "-", param:"-", actual: true },
+            { ch: "*", param:"*", actual: true },
+            { ch: "/", param:"/", actual: true },
+            { ch: "(", param:"(", actual: true },
+            { ch: ")", param:")", actual: true },
+            { ch: "1", param:"2", actual: false },
+            { ch: "1", param:"", actual: false },
+            { ch: "A", param:" ", actual: false },
+        ];
+
+        testVec.forEach(val => {
+            let _val: char = new char(val.ch)
+            expect(_val.isEqual(val.param)).to.equal(val.actual);
+        })
+    })
 });

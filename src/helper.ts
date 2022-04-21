@@ -73,17 +73,13 @@ export class char {
     private _val: number;
 
     public constructor(_val_:string | number) {
-        if ((typeof _val_ === "string") && (_val_.length != 1)) {
+        if ((typeof _val_ === "string") && (_val_.length > 1)) {
             throw new Error("Cahracter muts be sized 1 byte");
         } else if ((typeof _val_ === "string")) {
             this._val = _val_.charCodeAt(0);
         } else {
             this._val = _val_;
         }
-    }
-
-    public get val(): string {
-        return String.fromCharCode(this._val);
     }
 
     public isDigit(): boolean {
@@ -109,6 +105,14 @@ export class char {
         || this._val === '\ufeff'.charCodeAt(0);
     }
 
+    public isEqual(other: string): boolean {
+        if (other.length > 1) {
+            throw new Error("Cahracter muts be sized 1 byte");
+        }
+
+        return this._val === other.charCodeAt(0);
+    }
+
     public isLowerCase(): boolean {
         return this._val >= 'a'.charCodeAt(0) && this._val <= 'z'.charCodeAt(0);
     }
@@ -122,7 +126,7 @@ export class char {
     }
 
     public toString(): string {
-        return this._val.toString();
+        return String.fromCharCode(this._val);
     }
 
     public isAlpha(): boolean {
