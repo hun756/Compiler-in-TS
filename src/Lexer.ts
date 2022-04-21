@@ -1,4 +1,4 @@
-import { isDigit, isWhitespace } from "./helper";
+import { char, isDigit, isWhitespace } from "./helper";
 import { SyntaxKind } from "./SyntaxKind";
 import { SyntaxToken } from "./SyntaxToken";
 
@@ -6,73 +6,74 @@ import { SyntaxToken } from "./SyntaxToken";
 export class Lexer {
     private readonly _text: string;
     private _position: number;
-    private _current: string = "";
+    private _current: char;
 
     constructor(text: string) {
         this._text = text;
         this._position = 0;
+        this._current = new char('\0');
     }
 
-    public get current(): string {
+    public get current(): char {
         if (this._position >= this._text.length) {
-            return '/0';
+            this._current = new char('\0');
+            return this._current;
         }
 
-        return this._text[this._position];
+        this._current = new char(this._text[this._position])
+        return this._current;
     }
 
     private next(): void {
-        this._position++;
+        ++this._position;
     }
 
-    nextToken(): SyntaxToken {
-        // console.log(this._position, this.current);
-        
+    nextToken(): SyntaxToken {        
         if (this._position >= this._text.length) {
             return new SyntaxToken(SyntaxKind.EndOfFileToken, this._position, '\0', null as any);
         }
 
-        if (isDigit(this.current)) {
+        if (this.current.isDigit()) {
+            
             let start = this._position;
-            while (isDigit(this.current)) {
+            while (this.current.isDigit()) {
                 this.next();
             }
 
-            let length = this._position - start;
-            let text = this._text.substring(start, length);
+            let _length = this._position - start;
+            let text = this._text.substr(start, _length);
 
             let value: number = Number.parseInt(text) | 0;
 
-            return new SyntaxToken(SyntaxKind.NumberToken, start, text, value);
+            return new SyntaxToken(SyntaxKind.NumberToken, 0 | start, text, value);
         }
-        if (isWhitespace(this.current)) {
+        if (this.current.isWhitespace()) {
             let start = this._position;
-            while (isWhitespace(this.current)) {
+            
+            while (this.current.isWhitespace()) {
                 this.next();
             }
+        
+            let _length = this._position - start;
+            let text = this._text.substr(start, _length);
 
-            let length = this._position - start;
-            let text = this._text.substring(start, length);
-
-            console.log(this._position);
-
-            return new SyntaxToken(SyntaxKind.WhiteSpaceToken, start, text, null as any);
+            return new SyntaxToken(SyntaxKind.WhiteSpaceToken, 0 | start, text, null as any);
         }
 
-        if (this.current == '+') {
-            return new SyntaxToken(SyntaxKind.PlusToken, this._position++, '+', null as any);
-        } else if (this.current == '-') {
-            return new SyntaxToken(SyntaxKind.MinusToken, this._position++, '-', null as any);
-        } else if (this.current == '*') {
-            return new SyntaxToken(SyntaxKind.StarToken, this._position++, '*', null as any);
-        } else if (this.current == '/') {
-            return new SyntaxToken(SyntaxKind.SlashToken, this._position++, '/', null as any);
-        } else if (this.current == '(') {
-            return new SyntaxToken(SyntaxKind.OpenParanthesisToken, this._position++, '(', null as any);
-        } else if (this.current == ')') {
-            return new SyntaxToken(SyntaxKind.CloseParanthesisToken, this._position++, ')', null as any);
+        if (this.current.isEqual('+')) {
+            return new SyntaxToken(SyntaxKind.PlusToken, 0 | this._position++, '+', null as any);
+        } else if (this.current.isEqual('-')) {
+            return new SyntaxToken(SyntaxKind.MinusToken, 0 | this._position++, '-', null as any);
+        } else if (this.current.isEqual('*')) {
+            return new SyntaxToken(SyntaxKind.StarToken, 0 | this._position++, '*', null as any);
+        } else if (this.current.isEqual('/')) {
+            return new SyntaxToken(SyntaxKind.SlashToken, 0 |  this._position++, '/', null as any);
+        } else if (this.current.isEqual('(')) {
+            return new SyntaxToken(SyntaxKind.OpenParanthesisToken, 0 |  this._position++, '(', null as any);
+        } else if (this.current.isEqual(')')) {
+            return new SyntaxToken(SyntaxKind.CloseParanthesisToken, 0 |  this._position++, ')', null as any);
         }
 
-        return new SyntaxToken(SyntaxKind.BadToken, this._position++, this._text.substring(this._position - 1, 1), null as any);
+        return new SyntaxToken(SyntaxKind.BadToken, 0 | this._position++, this._text.substring(this._position - 1, 1), null as any);
     }
 }

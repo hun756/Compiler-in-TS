@@ -122,19 +122,48 @@ describe('Compiler Test', () => {
      * @bug
      *  !Fix it
      */
-    // it('Lexing Test 04 number + plustoken + number', () => {
-    //     let testVec: ITestStruct = {
-    //         compStr: "123+123",
-    //         tokenVec: [],
-    //         actual: [
-    //             new SyntaxToken(SyntaxKind.NumberToken, 0, "123", 123),
-    //             new SyntaxToken(SyntaxKind.PlusToken, 3, "+", null as any),
-    //             new SyntaxToken(SyntaxKind.NumberToken, 4, "123", 123),
-    //         ]
-    //     };
+    it('Lexing Test 05 number + plustoken + number', () => {
+        let testVec: ITestStruct = {
+            compStr: "123 +123",
+            tokenVec: [],
+            actual: [
+                new SyntaxToken(SyntaxKind.NumberToken, 0, "123", 123),
+                new SyntaxToken(SyntaxKind.WhiteSpaceToken, 3, ' ', null as any),
+                new SyntaxToken(SyntaxKind.PlusToken, 4, "+", null as any),
+                new SyntaxToken(SyntaxKind.NumberToken, 5, "123", 123),
+            ]
+        };
 
-    //     let lexer: Lexer = new Lexer(testVec.compStr);
-    //     __assign_w_token(testVec.tokenVec, lexer);
-    //     __verify(testVec);
-    // });
+        let lexer: Lexer = new Lexer(testVec.compStr);
+        __assign_w_token(testVec.tokenVec, lexer);
+        __verify(testVec);
+    });
+
+    it('Lexing Test 06 Complex', () => {
+        let testVec: ITestStruct = {
+            compStr: "12+123*    +++-1532//*54 ",
+            tokenVec: [],
+            actual: [
+                new SyntaxToken(SyntaxKind.NumberToken, 0, "12", 12),
+                new SyntaxToken(SyntaxKind.PlusToken, 2, "+", null as any),
+                new SyntaxToken(SyntaxKind.NumberToken, 3, "123", 123),
+                new SyntaxToken(SyntaxKind.StarToken, 6, "*", null as any),
+                new SyntaxToken(SyntaxKind.WhiteSpaceToken, 7, "    ", null as any),
+                new SyntaxToken(SyntaxKind.PlusToken, 11, "+", null as any),
+                new SyntaxToken(SyntaxKind.PlusToken, 12, "+", null as any),
+                new SyntaxToken(SyntaxKind.PlusToken, 13, "+", null as any),
+                new SyntaxToken(SyntaxKind.MinusToken, 14, "-", null as any),
+                new SyntaxToken(SyntaxKind.NumberToken, 15, "1532", 1532),
+                new SyntaxToken(SyntaxKind.SlashToken, 19, "/", null as any),
+                new SyntaxToken(SyntaxKind.SlashToken, 20, "/", null as any),
+                new SyntaxToken(SyntaxKind.StarToken, 21, "*", null as any),
+                new SyntaxToken(SyntaxKind.NumberToken, 22, "54", 54),
+                new SyntaxToken(SyntaxKind.WhiteSpaceToken, 24, " ", null as any),
+            ]
+        };
+
+        let lexer: Lexer = new Lexer(testVec.compStr);
+        __assign_w_token(testVec.tokenVec, lexer);
+        __verify(testVec);
+    });
 });
