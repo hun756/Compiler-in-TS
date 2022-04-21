@@ -42,11 +42,14 @@ describe('Test For is Digit', () => {
 
     it('check all characters', () => {
         let testVec: ITestStruct[] = [];
-        for (let i = 0; i < 100000; i++) {
+        for (let i = 0; i < 65574; i++) {
             if (i < 48 || i > 57) {
                 testVec.push({ ch: String.fromCharCode(i), actual: false });
             }
         }
+        testVec.forEach(val => {
+            expect(help.isDigit(val.ch)).to.equal(val.actual);
+        })
     });
 });
 
