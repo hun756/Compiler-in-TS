@@ -68,3 +68,65 @@ export function enumToStr(val: SyntaxKind): string {
 
     return res;
 }
+
+export class char {
+    private _val: number;
+
+    public constructor(_val_:string | number) {
+        if ((typeof _val_ === "string") && (_val_.length != 1)) {
+            throw new Error("Cahracter muts be sized 1 byte");
+        } else if ((typeof _val_ === "string")) {
+            this._val = _val_.charCodeAt(0);
+        } else {
+            this._val = _val_;
+        }
+    }
+
+    public get val(): string {
+        return String.fromCharCode(this._val);
+    }
+
+    public isDigit(): boolean {
+        return this._val >= 48 && this._val <= 57;
+    }
+
+    public isWhitespace(): boolean {
+        return this._val === ' '.charCodeAt(0)
+        || this._val === '\n'.charCodeAt(0)
+        || this._val === '\t'.charCodeAt(0)
+        || this._val === '\r'.charCodeAt(0)
+        || this._val === '\f'.charCodeAt(0)
+        || this._val === '\v'.charCodeAt(0)
+        || this._val === '\u00a0'.charCodeAt(0)
+        || this._val === '\u1680'.charCodeAt(0)
+        || this._val === '\u2000'.charCodeAt(0)
+        || this._val === '\u200a'.charCodeAt(0)
+        || this._val === '\u2028'.charCodeAt(0)
+        || this._val === '\u2029'.charCodeAt(0)
+        || this._val === '\u202f'.charCodeAt(0)
+        || this._val === '\u205f'.charCodeAt(0)
+        || this._val === '\u3000'.charCodeAt(0)
+        || this._val === '\ufeff'.charCodeAt(0);
+    }
+
+    public isLowerCase(): boolean {
+        return this._val >= 'a'.charCodeAt(0) && this._val <= 'z'.charCodeAt(0);
+    }
+
+    public isLetterOrDigit(): boolean {
+        return this.isDigit() || this.isAlpha();
+    }
+
+    public isUppercase(): boolean {
+        return !this.isLowerCase();
+    }
+
+    public toString(): string {
+        return this._val.toString();
+    }
+
+    public isAlpha(): boolean {
+        return (this._val >= 'a'.charCodeAt(0) && this._val <= 'z'.charCodeAt(0))
+        || (this._val >= 'A'.charCodeAt(0) && this._val <= 'Z'.charCodeAt(0))
+    }
+}
