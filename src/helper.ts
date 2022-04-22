@@ -1,33 +1,16 @@
 import { SyntaxKind } from "./SyntaxKind";
 
-
+/**
+ * @brief
+ *  Global String Operation
+ */
 export function isNullOrWhitSpace(str: string): boolean {
     return str === null || str.match(/^ *$/) !== null;
 }
 
-export function isWhitespace(c: string) {
-    return c === ' '
-        || c === '\n'
-        || c === '\t'
-        || c === '\r'
-        || c === '\f'
-        || c === '\v'
-        || c === '\u00a0'
-        || c === '\u1680'
-        || c === '\u2000'
-        || c === '\u200a'
-        || c === '\u2028'
-        || c === '\u2029'
-        || c === '\u202f'
-        || c === '\u205f'
-        || c === '\u3000'
-        || c === '\ufeff';
-}
-
-export function isDigit(c: string) {
-    return c >= '0' && c <= '9';
-}
-
+/**
+ * Printing support for enum.
+ */
 export function enumToStr(val: SyntaxKind): string {
     let res: string;
     switch (val) {
@@ -62,6 +45,12 @@ export function enumToStr(val: SyntaxKind): string {
         case SyntaxKind.EndOfFileToken:
             res = 'EndOfFileToken';
             break;
+        case SyntaxKind.NumberExpression:
+            res = 'NumberExpression';
+            break;
+        case SyntaxKind.BinaryExpression:
+            res = 'BinaryExpression';
+            break;
         default:
             throw new Error("Invalid Token");
     }
@@ -69,9 +58,17 @@ export function enumToStr(val: SyntaxKind): string {
     return res;
 }
 
+/** 
+ * Helper class for char
+*/
 export class char {
     private _val: number;
 
+    /**
+     * @brief
+     *  This method contructs new char object.
+     * @param {string} _val
+     */
     public constructor(_val_:string | number) {
         if ((typeof _val_ === "string") && (_val_.length > 1)) {
             throw new Error("Cahracter muts be sized 1 byte");
@@ -81,28 +78,40 @@ export class char {
             this._val = _val_;
         }
     }
-
+    
+    /**
+     * @brief
+     *  This method checks character is digit?
+     */
     public isDigit(): boolean {
-        return this._val >= 48 && this._val <= 57;
+        return char.isDigit(String.fromCharCode(this._val));
+    }
+
+    public static isDigit(c: string) {
+        return c >= '0' && c <= '9';
+    }
+
+    public static isWhitespace(c: string) {
+        return c === ' '
+            || c === '\n'
+            || c === '\t'
+            || c === '\r'
+            || c === '\f'
+            || c === '\v'
+            || c === '\u00a0'
+            || c === '\u1680'
+            || c === '\u2000'
+            || c === '\u200a'
+            || c === '\u2028'
+            || c === '\u2029'
+            || c === '\u202f'
+            || c === '\u205f'
+            || c === '\u3000'
+            || c === '\ufeff';
     }
 
     public isWhitespace(): boolean {
-        return this._val === ' '.charCodeAt(0)
-        || this._val === '\n'.charCodeAt(0)
-        || this._val === '\t'.charCodeAt(0)
-        || this._val === '\r'.charCodeAt(0)
-        || this._val === '\f'.charCodeAt(0)
-        || this._val === '\v'.charCodeAt(0)
-        || this._val === '\u00a0'.charCodeAt(0)
-        || this._val === '\u1680'.charCodeAt(0)
-        || this._val === '\u2000'.charCodeAt(0)
-        || this._val === '\u200a'.charCodeAt(0)
-        || this._val === '\u2028'.charCodeAt(0)
-        || this._val === '\u2029'.charCodeAt(0)
-        || this._val === '\u202f'.charCodeAt(0)
-        || this._val === '\u205f'.charCodeAt(0)
-        || this._val === '\u3000'.charCodeAt(0)
-        || this._val === '\ufeff'.charCodeAt(0);
+        return char.isWhitespace(String.fromCharCode(this._val));
     }
 
     public isEqual(other: string): boolean {
@@ -114,7 +123,11 @@ export class char {
     }
 
     public isLowerCase(): boolean {
-        return this._val >= 'a'.charCodeAt(0) && this._val <= 'z'.charCodeAt(0);
+        return char.isLowerCase(String.fromCharCode(this._val));
+    }
+
+    public static isLowerCase(_val: string): boolean {
+        return _val.charCodeAt(0) >= 'a'.charCodeAt(0) && _val.charCodeAt(0) <= 'z'.charCodeAt(0);
     }
 
     public isLetterOrDigit(): boolean {

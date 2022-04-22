@@ -1,4 +1,4 @@
-import { char, isDigit, isWhitespace } from "./helper";
+import { char } from "./helper";
 import { SyntaxKind } from "./SyntaxKind";
 import { SyntaxToken } from "./SyntaxToken";
 

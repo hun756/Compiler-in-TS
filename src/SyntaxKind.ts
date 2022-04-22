@@ -9,5 +9,7 @@ export enum SyntaxKind {
     OpenParanthesisToken,
     BadToken,
     CloseParanthesisToken,
-    EndOfFileToken
+    EndOfFileToken,
+    NumberExpression,
+    BinaryExpression
 }

@@ -1,4 +1,4 @@
-import * as help from "../src/helper"
+import { char, isNullOrWhitSpace } from "../src/helper"
 import { expect } from 'chai'
 
 describe('Test For is Digit', () => {
@@ -23,7 +23,7 @@ describe('Test For is Digit', () => {
         ]
 
         testVec.forEach(val => {
-            expect(help.isDigit(val.ch)).to.equal(val.actual);
+            expect(char.isDigit(val.ch)).to.equal(val.actual);
         })
     });
 
@@ -36,7 +36,7 @@ describe('Test For is Digit', () => {
         }
 
         testVec.forEach(val => {
-            expect(help.isDigit(val.ch)).to.equal(val.actual);
+            expect(char.isDigit(val.ch)).to.equal(val.actual);
         })
     });
 
@@ -48,7 +48,7 @@ describe('Test For is Digit', () => {
             }
         }
         testVec.forEach(val => {
-            expect(help.isDigit(val.ch)).to.equal(val.actual);
+            expect(char.isDigit(val.ch)).to.equal(val.actual);
         })
     });
 });
@@ -69,7 +69,7 @@ describe('Test Null  Or WhiteSpace', () => {
         ];
 
         testVec.forEach(val => {
-            expect(help.isNullOrWhitSpace(val.str)).to.equal(val.actual);
+            expect(isNullOrWhitSpace(val.str)).to.equal(val.actual);
         })
     })
 });
