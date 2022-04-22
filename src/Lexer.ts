@@ -7,11 +7,17 @@ export class Lexer {
     private readonly _text: string;
     private _position: number;
     private _current: char;
-
+    private _diagnostics: string[];
+    
     constructor(text: string) {
         this._text = text;
         this._position = 0;
         this._current = new char('\0');
+        this._diagnostics = new Array<string>();
+    }
+
+    public get diagnostics(): string[] {
+        return this._diagnostics;
     }
 
     public get current(): char {
@@ -73,7 +79,8 @@ export class Lexer {
         } else if (this.current.isEqual(')')) {
             return new SyntaxToken(SyntaxKind.CloseParanthesisToken, 0 |  this._position++, ')', null as any);
         }
-
+        
+        this._diagnostics.push(`ERROR! bad character input: ${this.current}`);
         return new SyntaxToken(SyntaxKind.BadToken, 0 | this._position++, this._text.substring(this._position - 1, 1), null as any);
     }
 }

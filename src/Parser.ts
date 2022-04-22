@@ -1,13 +1,16 @@
 import { BinaryExpressionSyntax } from "./BinaryExpressionSyntax";
 import { ExpressionSyntax } from "./ExpressionSyntax";
+import { enumToStr } from "./helper";
 import { Lexer } from "./Lexer";
 import { NumberExpressionSyntax } from "./NumberSyntax";
 import { SyntaxKind } from "./SyntaxKind";
 import { SyntaxToken } from "./SyntaxToken";
+import { SyntaxTree } from "./SyntaxTree";
 
 export class Parser {
     private readonly tokens: SyntaxToken[] = [];
     private _position: number = 0;
+    private _diagnostics: string[] = [];
 
     public constructor(_text: string) {
         this.tokens = new Array<SyntaxToken>();
@@ -21,7 +24,13 @@ export class Parser {
                 this.tokens.push(token);
             }
 
-        } while (token.kind != SyntaxKind.EndOfFileToken)
+        } while (token.kind != SyntaxKind.EndOfFileToken);
+
+        this._diagnostics.push.apply(this._diagnostics, lexer.diagnostics);
+    }
+
+    public get diagnostics(): string[] {
+        return this._diagnostics;
     }
 
     private Peek(offset: number): SyntaxToken {
@@ -48,10 +57,17 @@ export class Parser {
             return this.nextToken();
         }
 
+        this._diagnostics.push(`ERROR! Unexcepted teken <${enumToStr(this.current.kind)}>, expected <${enumToStr(kind)}>`);
         return new SyntaxToken(kind, this.current.position, null as any, null as any);
     }
 
-    public Parse(): ExpressionSyntax {
+    public Parse(): SyntaxTree {
+        const expression = this.parseExpression();
+        const endofFileToken = this.match(SyntaxKind.EndOfFileToken);
+        return new SyntaxTree(this._diagnostics, expression, endofFileToken);
+    }
+
+    private parseExpression(): ExpressionSyntax {
         var left = this.parsePrimaryExpression()
 
         while (this.current.kind == SyntaxKind.PlusToken

@@ -2,6 +2,7 @@ import { enumToStr, isNullOrWhitSpace } from "./helper";
 import { Parser } from "./Parser";
 import { SyntaxNode } from "./SyntaxNode";
 import { SyntaxToken } from "./SyntaxToken";
+import * as c from "ansi-colors";
 
 // └──
 // 
@@ -19,24 +20,30 @@ function prettyPrint(node: SyntaxNode, indent: string = "", islast: boolean = fa
 
     console.log(linearOuput)
 
-    indent += islast ? "    " : "|   ";
-    const last = node.children.slice(-1)[0]
+    indent += islast ? "    " : "│   ";
+    const lastChild = node.children.slice(-1)[0]
     for(let child of node.children) {
-        prettyPrint(child, indent, node == last);
+        prettyPrint(child, indent, child == lastChild);
     }
 }
 
 async function main(args: string[]) {
-    let line = "1 + 2 + 3 + 4 + 5 + 6 + 7 + 8 + 9";
+    let line = "1 + 2 ++     ";
 
     if (isNullOrWhitSpace(line)) {
         return;
     }
 
     const parser = new Parser(line);
-    var expression = parser.Parse();
+    var syntaxTree = parser.Parse();
 
-    prettyPrint(expression);
+    prettyPrint(syntaxTree.root);
+    if (syntaxTree.diagnostics.length > 0) {
+        for (let diagnostics of syntaxTree.diagnostics) {
+            console.log(c.red(diagnostics));
+        }
+    }
+
 };
 
 main([]).catch(err => console.error(err.stack));
