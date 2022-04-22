@@ -1,23 +1,42 @@
-import { Lexer } from "./Lexer";
-import { SyntaxKind } from "./SyntaxKind";
+import { enumToStr, isNullOrWhitSpace } from "./helper";
+import { Parser } from "./Parser";
+import { SyntaxNode } from "./SyntaxNode";
+import { SyntaxToken } from "./SyntaxToken";
 
-// async function main(args: string[]) {
-//     let line: string = "123 456";
-//     var lexer = new Lexer(line);
-//     while (true) {
-//         var token = lexer.nextToken();
-//         if (token.kind == SyntaxKind.EndOfFileToken) {
-//             break;
-//         }
+// └──
+// 
+// │
+function prettyPrint(node: SyntaxNode, indent: string = "", islast: boolean = false):void {
+    const marker = islast ? "└──" : "├──";
+    let linearOuput:string = indent;
+    linearOuput += marker;
+    linearOuput += enumToStr(node.kind);
 
-//         process.stdout.write(enumToStr(token.kind) + ` : '${token.text}'`)
-//         if (token.value != null) {
-//             process.stdout.write(` ${token.value.toString()}`);
-//             // console.log(`${token.value.toString()}`)
-//         }
+    if (node instanceof SyntaxToken && node.value != null) {
+        linearOuput += " ";
+        linearOuput += node.value;
+    }
 
-//         console.log();
-//     }
-// };
+    console.log(linearOuput)
 
-// main([]).catch(err => console.error(err.stack));
+    indent += islast ? "    " : "|   ";
+    const last = node.children.slice(-1)[0]
+    for(let child of node.children) {
+        prettyPrint(child, indent, node == last);
+    }
+}
+
+async function main(args: string[]) {
+    let line = "1 + 2 + 3 + 4 + 5 + 6 + 7 + 8 + 9";
+
+    if (isNullOrWhitSpace(line)) {
+        return;
+    }
+
+    const parser = new Parser(line);
+    var expression = parser.Parse();
+
+    prettyPrint(expression);
+};
+
+main([]).catch(err => console.error(err.stack));
