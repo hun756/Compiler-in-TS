@@ -62,42 +62,41 @@ export class Parser {
         return new SyntaxToken(kind, this.current.position, null as any, null as any);
     }
 
-    private parseExpression(): ExpressionSyntax {
-        return this.parseTerm();
-    }
-
     public Parse(): SyntaxTree {
-        const expression = this.parseTerm();
+        const expression = this.parseExpression();
         const endofFileToken = this.match(SyntaxKind.EndOfFileToken);
         return new SyntaxTree(this._diagnostics, expression, endofFileToken);
     }
 
-    private parseTerm(): ExpressionSyntax {
-        var left = this.parseFactor()
+    private parseExpression(parentPredence: number = 0): ExpressionSyntax {
+        var left = this.parsePrimaryExpression();
 
-        while (this.current.kind == SyntaxKind.PlusToken
-            || this.current.kind == SyntaxKind.MinusToken) {
+        while (true) {
+            var predence = Parser.getbinaryOperatorPrecedence(this.current.kind)
+            
+            if (predence == 0 || predence <= parentPredence) {
+                break;
+            }
 
-            let operatorToken = this.nextToken();
-            let right = this.parseFactor();
+            var operatorToken = this.nextToken();
+            var right = this.parseExpression(predence);
             left = new BinaryExpressionSyntax(left, operatorToken, right);
         }
 
         return left;
     }
 
-    private parseFactor(): ExpressionSyntax {
-        var left = this.parsePrimaryExpression()
-
-        while (this.current.kind == SyntaxKind.StarToken
-            || this.current.kind == SyntaxKind.SlashToken) {
-
-            let operatorToken = this.nextToken();
-            let right = this.parsePrimaryExpression();
-            left = new BinaryExpressionSyntax(left, operatorToken, right);
+    private static getbinaryOperatorPrecedence(kind: SyntaxKind) {
+        switch (kind) {
+            case SyntaxKind.PlusToken:
+            case SyntaxKind.MinusToken:
+                return 1;
+            case SyntaxKind.StarToken:
+            case SyntaxKind.SlashToken:
+                return 2;
+            default:
+                return 0;
         }
-
-        return left;
     }
 
     private parsePrimaryExpression(): ExpressionSyntax {
