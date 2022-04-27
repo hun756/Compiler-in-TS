@@ -8,6 +8,22 @@ import { SyntaxKind } from "./SyntaxKind";
 import { SyntaxToken } from "./SyntaxToken";
 import { SyntaxTree } from "./SyntaxTree";
 
+
+class SynTaxFacts {
+    public static getbinaryOperatorPrecedence(kind: SyntaxKind) {
+        switch (kind) {
+            case SyntaxKind.PlusToken:
+            case SyntaxKind.MinusToken:
+                return 1;
+            case SyntaxKind.StarToken:
+            case SyntaxKind.SlashToken:
+                return 2;
+            default:
+                return 0;
+        }
+    }
+}
+
 export class Parser {
     private readonly tokens: SyntaxToken[] = [];
     private _position: number = 0;
@@ -72,7 +88,7 @@ export class Parser {
         var left = this.parsePrimaryExpression();
 
         while (true) {
-            var predence = Parser.getbinaryOperatorPrecedence(this.current.kind)
+            var predence = SynTaxFacts.getbinaryOperatorPrecedence(this.current.kind)
             
             if (predence == 0 || predence <= parentPredence) {
                 break;
@@ -84,19 +100,6 @@ export class Parser {
         }
 
         return left;
-    }
-
-    private static getbinaryOperatorPrecedence(kind: SyntaxKind) {
-        switch (kind) {
-            case SyntaxKind.PlusToken:
-            case SyntaxKind.MinusToken:
-                return 1;
-            case SyntaxKind.StarToken:
-            case SyntaxKind.SlashToken:
-                return 2;
-            default:
-                return 0;
-        }
     }
 
     private parsePrimaryExpression(): ExpressionSyntax {
