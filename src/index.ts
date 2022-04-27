@@ -3,6 +3,7 @@ import { Parser } from "./Parser";
 import { SyntaxNode } from "./SyntaxNode";
 import { SyntaxToken } from "./SyntaxToken";
 import * as c from "ansi-colors";
+import { Evaluator } from "./Evaluator";
 
 // └──
 // 
@@ -28,7 +29,7 @@ function prettyPrint(node: SyntaxNode, indent: string = "", islast: boolean = fa
 }
 
 async function main(args: string[]) {
-    let line = "1 + 2 ++     ";
+    let line = "1 + 2 * 3";
 
     if (isNullOrWhitSpace(line)) {
         return;
@@ -42,6 +43,10 @@ async function main(args: string[]) {
         for (let diagnostics of syntaxTree.diagnostics) {
             console.log(c.red(diagnostics));
         }
+    } else {
+        var e = new Evaluator(syntaxTree.root);
+        var result = e.evaluate();
+        console.log("Output value is :",result);
     }
 
 };

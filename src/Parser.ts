@@ -62,16 +62,30 @@ export class Parser {
     }
 
     public Parse(): SyntaxTree {
-        const expression = this.parseExpression();
+        const expression = this.parseTerm();
         const endofFileToken = this.match(SyntaxKind.EndOfFileToken);
         return new SyntaxTree(this._diagnostics, expression, endofFileToken);
     }
 
-    private parseExpression(): ExpressionSyntax {
-        var left = this.parsePrimaryExpression()
+    private parseTerm(): ExpressionSyntax {
+        var left = this.parseFactor()
 
         while (this.current.kind == SyntaxKind.PlusToken
             || this.current.kind == SyntaxKind.MinusToken) {
+
+            let operatorToken = this.nextToken();
+            let right = this.parseFactor();
+            left = new BinaryExpressionSyntax(left, operatorToken, right);
+        }
+
+        return left;
+    }
+
+    private parseFactor(): ExpressionSyntax {
+        var left = this.parsePrimaryExpression()
+
+        while (this.current.kind == SyntaxKind.StarToken
+            || this.current.kind == SyntaxKind.SlashToken) {
 
             let operatorToken = this.nextToken();
             let right = this.parsePrimaryExpression();

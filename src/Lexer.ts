@@ -1,4 +1,4 @@
-import { char } from "./helper";
+import { char, Int } from "./helper";
 import { SyntaxKind } from "./SyntaxKind";
 import { SyntaxToken } from "./SyntaxToken";
 
@@ -49,7 +49,12 @@ export class Lexer {
             let _length = this._position - start;
             let text = this._text.substr(start, _length);
 
-            let value: number = Number.parseInt(text) | 0;
+            let value: number, control: any;
+            control = Int.tryParse(text);
+            if(!control.isParsed) {
+                this._diagnostics.push(`The number ${this._text} is not valid 32 bit integer..`);
+            }
+            value = control.val;
 
             return new SyntaxToken(SyntaxKind.NumberToken, 0 | start, text, value);
         }
