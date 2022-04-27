@@ -4,6 +4,7 @@ import { SyntaxNode } from "./SyntaxNode";
 import { SyntaxToken } from "./SyntaxToken";
 import * as c from "ansi-colors";
 import { Evaluator } from "./Evaluator";
+import { SyntaxTree } from "./SyntaxTree";
 
 // └──
 // 
@@ -35,8 +36,7 @@ async function main(args: string[]) {
         return;
     }
 
-    const parser = new Parser(line);
-    var syntaxTree = parser.Parse();
+    var syntaxTree = SyntaxTree.parse(line);
 
     prettyPrint(syntaxTree.root);
     if (syntaxTree.diagnostics.length > 0) {

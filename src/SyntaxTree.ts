@@ -1,4 +1,5 @@
 import { ExpressionSyntax } from "./ExpressionSyntax";
+import { Parser } from "./Parser";
 import { SyntaxToken } from "./SyntaxToken";
 
 export class SyntaxTree {
@@ -23,5 +24,10 @@ export class SyntaxTree {
 
     public get endofFileToken(): SyntaxToken {
         return this._endofFileToken;
+    }
+
+    public static parse(text:string): any {
+        let parser = new Parser(text);
+        return parser.Parse();
     }
 }
