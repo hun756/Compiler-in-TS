@@ -1,6 +1,7 @@
 import { BinaryExpressionSyntax } from "./BinaryExpressionSyntax";
 import { ExpressionSyntax } from "./ExpressionSyntax";
 import { NumberExpressionSyntax } from "./NumberSyntax";
+import { ParenthesizedExpressionSyntax } from "./ParenthesizedExpressionSyntax";
 import { SyntaxKind } from "./SyntaxKind";
 
 export class Evaluator {
@@ -38,6 +39,10 @@ export class Evaluator {
             } else {
                 throw new Error(`Unexcepted binary operator: ${node.operatorToken.kind}`)
             }
+        }
+
+        if (node instanceof ParenthesizedExpressionSyntax) {
+            return this.evaluateExpression(node.expression);
         }
         
         throw new Error(`Unexcepted node: ${node.kind}`)

@@ -51,6 +51,9 @@ export function enumToStr(val: SyntaxKind): string {
         case SyntaxKind.BinaryExpression:
             res = 'BinaryExpression';
             break;
+        case SyntaxKind.ParenthesizedExpression:
+            res = 'ParenthesizedExpression';
+            break;
         default:
             throw new Error("Invalid Token");
     }

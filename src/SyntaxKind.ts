@@ -11,5 +11,6 @@ export enum SyntaxKind {
     CloseParanthesisToken,
     EndOfFileToken,
     NumberExpression,
-    BinaryExpression
+    BinaryExpression,
+    ParenthesizedExpression
 }

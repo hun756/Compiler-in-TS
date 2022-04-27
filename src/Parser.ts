@@ -3,6 +3,7 @@ import { ExpressionSyntax } from "./ExpressionSyntax";
 import { enumToStr } from "./helper";
 import { Lexer } from "./Lexer";
 import { NumberExpressionSyntax } from "./NumberSyntax";
+import { ParenthesizedExpressionSyntax } from "./ParenthesizedExpressionSyntax";
 import { SyntaxKind } from "./SyntaxKind";
 import { SyntaxToken } from "./SyntaxToken";
 import { SyntaxTree } from "./SyntaxTree";
@@ -57,8 +58,12 @@ export class Parser {
             return this.nextToken();
         }
 
-        this._diagnostics.push(`ERROR! Unexcepted teken <${enumToStr(this.current.kind)}>, expected <${enumToStr(kind)}>`);
+        this._diagnostics.push(`ERROR! Unexpected token <${enumToStr(this.current.kind)}>, expected <${enumToStr(kind)}>`);
         return new SyntaxToken(kind, this.current.position, null as any, null as any);
+    }
+
+    private parseExpression(): ExpressionSyntax {
+        return this.parseTerm();
     }
 
     public Parse(): SyntaxTree {
@@ -96,6 +101,12 @@ export class Parser {
     }
 
     private parsePrimaryExpression(): ExpressionSyntax {
+        if (this.current.kind == SyntaxKind.OpenParanthesisToken) {
+            var left = this.nextToken();
+            var expression = this.parseExpression();
+            var right = this.match(SyntaxKind.CloseParanthesisToken);
+            return new ParenthesizedExpressionSyntax(left, expression, right);
+        }
         let numberToken = this.match(SyntaxKind.NumberToken);
         return new NumberExpressionSyntax(numberToken);
     }
