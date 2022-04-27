@@ -37,7 +37,7 @@ export class Evaluator {
             } else if(node.operatorToken.kind == SyntaxKind.SlashToken) {
                 return left / right;
             } else {
-                throw new Error(`Unexcepted binary operator: ${node.operatorToken.kind}`)
+                throw new Error(`Unexpected binary operator: ${node.operatorToken.kind}`)
             }
         }
 
@@ -45,7 +45,7 @@ export class Evaluator {
             return this.evaluateExpression(node.expression);
         }
         
-        throw new Error(`Unexcepted node: ${node.kind}`)
+        throw new Error(`Unexpected node: ${node.kind}`)
     }
 }
 

@@ -1,10 +1,10 @@
-import { enumToStr, isNullOrWhitSpace } from "./helper";
-import { Parser } from "./Parser";
-import { SyntaxNode } from "./SyntaxNode";
-import { SyntaxToken } from "./SyntaxToken";
+import { enumToStr, isNullOrWhitSpace } from "./CodeAnalysis/helper";
+import { Parser } from "./CodeAnalysis/Parser";
+import { SyntaxNode } from "./CodeAnalysis/SyntaxNode";
+import { SyntaxToken } from "./CodeAnalysis/SyntaxToken";
 import * as c from "ansi-colors";
-import { Evaluator } from "./Evaluator";
-import { SyntaxTree } from "./SyntaxTree";
+import { Evaluator } from "./CodeAnalysis/Evaluator";
+import { SyntaxTree } from "./CodeAnalysis/SyntaxTree";
 
 // └──
 // 

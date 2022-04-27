@@ -1,4 +1,4 @@
-import { char, Int } from "../src/helper"
+import { char, Int } from "../src/CodeAnalysis/helper"
 import { expect } from 'chai'
 
 describe('Test For Integer', () => {

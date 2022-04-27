@@ -1,6 +1,6 @@
-import { Lexer } from "../src/Lexer";
-import { SyntaxToken } from "../src/SyntaxToken";
-import { SyntaxKind } from "../src/SyntaxKind";
+import { Lexer } from "../src/CodeAnalysis/Lexer";
+import { SyntaxToken } from "../src/CodeAnalysis/SyntaxToken";
+import { SyntaxKind } from "../src/CodeAnalysis/SyntaxKind";
 import { expect } from 'chai'
 
 describe('Compiler Test', () => {
