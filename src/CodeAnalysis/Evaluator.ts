@@ -1,4 +1,5 @@
 import { BinaryExpressionSyntax } from "./BinaryExpressionSyntax";
+import { UnaryExpressionSyntax } from "./UnaryExpressionSyntax";
 import { ExpressionSyntax } from "./ExpressionSyntax";
 import { LiteralExpressionSyntax } from "./LiteralExpressionSyntax";
 import { ParenthesizedExpressionSyntax } from "./ParenthesizedExpressionSyntax";
@@ -22,6 +23,17 @@ export class Evaluator {
 
         if (node instanceof LiteralExpressionSyntax) {
             return node.numberToken.value as number;
+        }
+
+        if (node instanceof UnaryExpressionSyntax) {
+            var operand_ = this.evaluateExpression(node.operand);
+            if(node.operatorToken.kind == SyntaxKind.PlusToken) {
+                return operand_;
+            } else if(node.operatorToken.kind == SyntaxKind.MinusToken) {
+                return -operand_;
+            } else {
+                throw new Error(`Unexpected unary operator ${node.operatorToken.kind}`)
+            }
         }
 
         if (node instanceof BinaryExpressionSyntax) {

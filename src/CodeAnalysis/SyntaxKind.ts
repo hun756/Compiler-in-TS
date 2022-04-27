@@ -14,6 +14,7 @@ export enum SyntaxKind {
 
     // Expression
     LiteralExpression,
+    UnaryExpression,
     BinaryExpression,
     ParenthesizedExpression
 }

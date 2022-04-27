@@ -1,28 +1,14 @@
 import { BinaryExpressionSyntax } from "./BinaryExpressionSyntax";
+import { UnaryExpressionSyntax } from "./UnaryExpressionSyntax";
 import { ExpressionSyntax } from "./ExpressionSyntax";
 import { enumToStr } from "./helper";
 import { Lexer } from "./Lexer";
 import { LiteralExpressionSyntax } from "./LiteralExpressionSyntax";
 import { ParenthesizedExpressionSyntax } from "./ParenthesizedExpressionSyntax";
+import { SynTaxFacts } from "./SyntaxFacts";
 import { SyntaxKind } from "./SyntaxKind";
 import { SyntaxToken } from "./SyntaxToken";
 import { SyntaxTree } from "./SyntaxTree";
-
-
-class SynTaxFacts {
-    public static getbinaryOperatorPrecedence(kind: SyntaxKind) {
-        switch (kind) {
-            case SyntaxKind.PlusToken:
-            case SyntaxKind.MinusToken:
-                return 1;
-            case SyntaxKind.StarToken:
-            case SyntaxKind.SlashToken:
-                return 2;
-            default:
-                return 0;
-        }
-    }
-}
 
 export class Parser {
     private readonly tokens: SyntaxToken[] = [];
@@ -85,10 +71,20 @@ export class Parser {
     }
 
     private parseExpression(parentPredence: number = 0): ExpressionSyntax {
-        var left = this.parsePrimaryExpression();
+        // var left = this.parsePrimaryExpression();
+        var left: ExpressionSyntax;
+        var unaryOperatorPredence = SynTaxFacts.getUnaryOperatorPrecedence(this.current.kind);
+
+        if (unaryOperatorPredence != 0 && unaryOperatorPredence >= parentPredence) {
+            var operatorToken = this.nextToken();
+            var operand = this.parseExpression(unaryOperatorPredence);
+            left = new UnaryExpressionSyntax(operatorToken, operand);
+        } else {
+            left = this.parsePrimaryExpression();
+        }
 
         while (true) {
-            var predence = SynTaxFacts.getbinaryOperatorPrecedence(this.current.kind)
+            var predence = SynTaxFacts.getBinaryOperatorPrecedence(this.current.kind)
             
             if (predence == 0 || predence <= parentPredence) {
                 break;
