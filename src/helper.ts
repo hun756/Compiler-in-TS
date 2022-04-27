@@ -147,3 +147,70 @@ export class char {
         || (this._val >= 'A'.charCodeAt(0) && this._val <= 'Z'.charCodeAt(0))
     }
 }
+
+// interface IReferenceResolver {
+//     isParsed : boolean;
+//     val: number;
+// }
+
+export class Int {
+    private _val: number;
+
+    public static readonly _min = -2147483648;
+    public static readonly _max = 2147483647;
+
+    public constructor(val: any) {
+        var tempVar;
+        try {
+            tempVar = parseInt(val);
+        } catch (error) {
+            throw error;
+        }
+
+        if (isNaN(tempVar)) { 
+            throw new Error("Object is not number");
+        }
+
+        if (Int.checkTrueBound(tempVar)) {
+            this._val = 0|tempVar;
+        } else {
+            throw new Error("Invalid integer bound");
+        }
+    }
+
+    public static tryParse(val: any): any {
+        let tempVar = parseInt(val);
+    
+
+        if (isNaN(tempVar)) { 
+            return {
+                isParsed : false,
+                val: 0
+            };
+        }
+        
+        if (!Int.checkTrueBound(tempVar)) {
+            return {
+                isParsed : false,
+                val: 0
+            };
+        }
+
+        return {
+            isParsed : true,
+            val: 0|tempVar
+        };
+    }
+
+    public static checkTrueBound(val: number): boolean {
+        return (val >= Int._min && val <= Int._max);
+    }
+
+    public get value() {
+        return this._val;
+    }
+
+    public set value(val: number)/*: void */ {
+        this._val = val;
+    }
+}
