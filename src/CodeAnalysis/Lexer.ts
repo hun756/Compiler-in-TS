@@ -34,7 +34,7 @@ export class Lexer {
         ++this._position;
     }
 
-    nextToken(): SyntaxToken {        
+    lex(): SyntaxToken {        
         if (this._position >= this._text.length) {
             return new SyntaxToken(SyntaxKind.EndOfFileToken, this._position, '\0', null as any);
         }

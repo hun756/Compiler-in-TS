@@ -18,7 +18,7 @@ export class Parser {
         let lexer = new Lexer(_text);
         let token: SyntaxToken;
         do {
-            token = lexer.nextToken();
+            token = lexer.lex();
             if (token.kind != SyntaxKind.WhiteSpaceToken
                 && token.kind != SyntaxKind.BadToken) {
 
