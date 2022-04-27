@@ -45,7 +45,7 @@ export function enumToStr(val: SyntaxKind): string {
         case SyntaxKind.EndOfFileToken:
             res = 'EndOfFileToken';
             break;
-        case SyntaxKind.NumberExpression:
+        case SyntaxKind.LiteralExpression:
             res = 'NumberExpression';
             break;
         case SyntaxKind.BinaryExpression:

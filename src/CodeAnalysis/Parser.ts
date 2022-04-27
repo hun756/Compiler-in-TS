@@ -2,7 +2,7 @@ import { BinaryExpressionSyntax } from "./BinaryExpressionSyntax";
 import { ExpressionSyntax } from "./ExpressionSyntax";
 import { enumToStr } from "./helper";
 import { Lexer } from "./Lexer";
-import { NumberExpressionSyntax } from "./NumberSyntax";
+import { LiteralExpressionSyntax } from "./LiteralExpressionSyntax";
 import { ParenthesizedExpressionSyntax } from "./ParenthesizedExpressionSyntax";
 import { SyntaxKind } from "./SyntaxKind";
 import { SyntaxToken } from "./SyntaxToken";
@@ -108,6 +108,6 @@ export class Parser {
             return new ParenthesizedExpressionSyntax(left, expression, right);
         }
         let numberToken = this.match(SyntaxKind.NumberToken);
-        return new NumberExpressionSyntax(numberToken);
+        return new LiteralExpressionSyntax(numberToken);
     }
 }

@@ -6,9 +6,7 @@ import * as c from "ansi-colors";
 import { Evaluator } from "./CodeAnalysis/Evaluator";
 import { SyntaxTree } from "./CodeAnalysis/SyntaxTree";
 
-// └──
-// 
-// │
+
 function prettyPrint(node: SyntaxNode, indent: string = "", islast: boolean = false):void {
     const marker = islast ? "└──" : "├──";
     let linearOuput:string = indent;

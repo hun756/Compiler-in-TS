@@ -3,7 +3,7 @@ import { SyntaxKind } from "./SyntaxKind";
 import { SyntaxNode } from "./SyntaxNode";
 import { SyntaxToken } from "./SyntaxToken";
 
-export class NumberExpressionSyntax extends ExpressionSyntax {
+export class LiteralExpressionSyntax extends ExpressionSyntax {
 
     private _numberToken: SyntaxToken;
 
@@ -17,7 +17,7 @@ export class NumberExpressionSyntax extends ExpressionSyntax {
     }
 
     public get kind(): SyntaxKind {
-        return SyntaxKind.NumberExpression;
+        return SyntaxKind.LiteralExpression;
     }
 
     public get children(): SyntaxNode[] {
