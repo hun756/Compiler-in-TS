@@ -28,8 +28,7 @@ function prettyPrint(node: SyntaxNode, indent: string = "", islast: boolean = fa
 }
 
 async function main(args: string[]) {
-    // let line = "(((1 + 2)+ 1)- 1) * 3";
-    let line = "+--+1";
+    let line = "(((--1 + 2)+ 1)- 1) * 3 / 3";
 
     if (isNullOrWhitSpace(line)) {
         return;
