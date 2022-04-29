@@ -1,11 +1,12 @@
-import { enumToStr, isNullOrWhitSpace } from "./helper";
-import { Parser } from "./Parser";
-import { SyntaxNode } from "./SyntaxNode";
-import { SyntaxToken } from "./SyntaxToken";
+import { enumToStr, isNullOrWhitSpace } from "./CodeAnalysis/helper";
+import { Parser } from "./CodeAnalysis/Parser";
+import { SyntaxNode } from "./CodeAnalysis/SyntaxNode";
+import { SyntaxToken } from "./CodeAnalysis/SyntaxToken";
+import * as c from "ansi-colors";
+import { Evaluator } from "./CodeAnalysis/Evaluator";
+import { SyntaxTree } from "./CodeAnalysis/SyntaxTree";
 
-// └──
-// 
-// │
+
 function prettyPrint(node: SyntaxNode, indent: string = "", islast: boolean = false):void {
     const marker = islast ? "└──" : "├──";
     let linearOuput:string = indent;
@@ -19,24 +20,33 @@ function prettyPrint(node: SyntaxNode, indent: string = "", islast: boolean = fa
 
     console.log(linearOuput)
 
-    indent += islast ? "    " : "|   ";
-    const last = node.children.slice(-1)[0]
+    indent += islast ? "    " : "│   ";
+    const lastChild = node.children.slice(-1)[0]
     for(let child of node.children) {
-        prettyPrint(child, indent, node == last);
+        prettyPrint(child, indent, child == lastChild);
     }
 }
 
 async function main(args: string[]) {
-    let line = "1 + 2 + 3 + 4 + 5 + 6 + 7 + 8 + 9";
+    let line = "(((--1 + 2)+ 1)- 1) * 3 / 3";
 
     if (isNullOrWhitSpace(line)) {
         return;
     }
 
-    const parser = new Parser(line);
-    var expression = parser.Parse();
+    var syntaxTree = SyntaxTree.parse(line);
 
-    prettyPrint(expression);
+    prettyPrint(syntaxTree.root);
+    if (syntaxTree.diagnostics.length > 0) {
+        for (let diagnostics of syntaxTree.diagnostics) {
+            console.log(c.red(diagnostics));
+        }
+    } else {
+        var e = new Evaluator(syntaxTree.root);
+        var result = e.evaluate();
+        console.log("Output value is :",result);
+    }
+
 };
 
 main([]).catch(err => console.error(err.stack));

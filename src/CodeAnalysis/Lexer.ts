@@ -1,4 +1,4 @@
-import { char } from "./helper";
+import { char, Int } from "./helper";
 import { SyntaxKind } from "./SyntaxKind";
 import { SyntaxToken } from "./SyntaxToken";
 
@@ -7,11 +7,17 @@ export class Lexer {
     private readonly _text: string;
     private _position: number;
     private _current: char;
-
+    private _diagnostics: string[];
+    
     constructor(text: string) {
         this._text = text;
         this._position = 0;
         this._current = new char('\0');
+        this._diagnostics = new Array<string>();
+    }
+
+    public get diagnostics(): string[] {
+        return this._diagnostics;
     }
 
     public get current(): char {
@@ -28,7 +34,7 @@ export class Lexer {
         ++this._position;
     }
 
-    nextToken(): SyntaxToken {        
+    lex(): SyntaxToken {        
         if (this._position >= this._text.length) {
             return new SyntaxToken(SyntaxKind.EndOfFileToken, this._position, '\0', null as any);
         }
@@ -43,7 +49,12 @@ export class Lexer {
             let _length = this._position - start;
             let text = this._text.substr(start, _length);
 
-            let value: number = Number.parseInt(text) | 0;
+            let value: number, control: any;
+            control = Int.tryParse(text);
+            if(!control.isParsed) {
+                this._diagnostics.push(`The number ${this._text} is not valid 32 bit integer..`);
+            }
+            value = control.val;
 
             return new SyntaxToken(SyntaxKind.NumberToken, 0 | start, text, value);
         }
@@ -73,7 +84,8 @@ export class Lexer {
         } else if (this.current.isEqual(')')) {
             return new SyntaxToken(SyntaxKind.CloseParanthesisToken, 0 |  this._position++, ')', null as any);
         }
-
+        
+        this._diagnostics.push(`ERROR! bad character input: ${this.current}`);
         return new SyntaxToken(SyntaxKind.BadToken, 0 | this._position++, this._text.substring(this._position - 1, 1), null as any);
     }
 }

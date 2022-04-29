@@ -1,4 +1,4 @@
-import { char, isNullOrWhitSpace } from "../src/helper"
+import { char, isNullOrWhitSpace } from "../src/CodeAnalysis/helper"
 import { expect } from 'chai'
 
 describe('Test For is Digit', () => {

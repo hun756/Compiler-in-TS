@@ -11,7 +11,7 @@ prettyPrint(expression);
 ```
 
 use ts-node for runnig
-```sh
+```console
 node --loader ts-node/esm .\src\index.ts
 ```
 

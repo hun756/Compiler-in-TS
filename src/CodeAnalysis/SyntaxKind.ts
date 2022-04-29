@@ -1,5 +1,6 @@
 
 export enum SyntaxKind {
+    // Tokens..
     NumberToken,
     WhiteSpaceToken,
     PlusToken,
@@ -10,6 +11,10 @@ export enum SyntaxKind {
     BadToken,
     CloseParanthesisToken,
     EndOfFileToken,
-    NumberExpression,
-    BinaryExpression
+
+    // Expression
+    LiteralExpression,
+    UnaryExpression,
+    BinaryExpression,
+    ParenthesizedExpression
 }

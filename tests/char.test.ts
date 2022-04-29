@@ -1,4 +1,4 @@
-import { char } from "../src/helper"
+import { char } from "../src/CodeAnalysis/helper"
 import { expect } from 'chai'
 
 describe('Test For Char', () => {
